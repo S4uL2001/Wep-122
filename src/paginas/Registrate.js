@@ -6,125 +6,77 @@ const TuFormulario = () => {
     firstName: '',
     lastName: '',
     username: '',
+    city: '',
     zip: '',
-    agree: false,
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = ({ target }) => {
+    const { name, value, type, checked } = target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Formulario enviado con éxito!');
+    try {
+      // Realiza operaciones asíncronas aquí
+      alert('Formulario enviado con éxito!');
+    } catch (error) {
+      console.error('Error al enviar el formulario:', error);
+      // Manejar el error, mostrar un mensaje al usuario, etc.
+    }
   };
+
+  const renderFormGroup = (label, id, name, value, onChange, required = true, type = 'text') => (
+    <div className="col-md-6 mb-3">
+      <label htmlFor={id} className="form-label">
+        {label}
+      </label>
+      <input
+        type={type}
+        className={`form-control ${formData[name] ? 'is-valid' : 'is-invalid'}`}
+        id={id}
+        name={name}
+        value={formData[name]}
+        onChange={onChange}
+        required={required}
+      />
+      <div id={`${id}Feedback`} className={`invalid-feedback ${formData[name] ? 'd-none' : ''}`}>
+        Este campo es obligatorio.
+      </div>
+    </div>
+  );
 
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-8">
-            
           <form
-            className="row g-3 p-4"
-            style={{ border: '1px solid #ddd', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
+            className="row g-3 p-4 bg-light rounded"
+            style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
             onSubmit={handleSubmit}
           >
-            <h1>Registrate</h1>
-      <div className="col-md-4">
-        <label htmlFor="validationServer01" className="form-label">
-          Nombres
-        </label>
-        <input
-          type="text"
-          className="form-control is-valid"
-          id="validationServer01"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-        />
-        
-      </div>
-      <div className="col-md-4">
-        <label htmlFor="validationServer02" className="form-label">
-          Apellidos
-        </label>
-        <input
-          type="text"
-          className="form-control is-valid"
-          id="validationServer02"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-        
-      </div>
-      <div className="col-md-4">
-        <label htmlFor="validationServerUsername" className="form-label">
-          Correo Electronico
-        </label>
-        <div className="input-group has-validation">
-          <span className="input-group-text" id="inputGroupPrepend3">
-            @
-          </span>
-          <input
-            type="text"
-            className="form-control is-invalid"
-            id="validationServerUsername"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback"
-            required
-          />
-          
-        </div>
-      </div>
-      <div className="col-md-6">
-        <label htmlFor="validationServer03" className="form-label">
-          Departamento
-        </label>
-        <input
-          type="text"
-          className="form-control is-invalid"
-          id="validationServer03"
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-          aria-describedby="validationServer03Feedback"
-          required
-        />
-       
-      </div>
-      
-      <div className="col-md-3">
-        <label htmlFor="validationServer05" className="form-label">
-          Edad
-        </label>
-        <input
-          type="text"
-          className="form-control is-invalid"
-          id="validationServer05"
-          name="zip"
-          value={formData.zip}
-          onChange={handleChange}
-          aria-describedby="validationServer05Feedback"
-          required
-        />
-       
-      </div>
-     
-      <div className="col-12">
-        <button className="btn btn-primary" type="submit">
-          Emviar
-        </button>
-      </div>
-      </form>
+            <h1 className="mb-4">Regístrate</h1>
+            {renderFormGroup('Nombres', 'validationServer01', 'firstName', formData.firstName, handleChange)}
+            {renderFormGroup('Apellidos', 'validationServer02', 'lastName', formData.lastName, handleChange)}
+            {renderFormGroup(
+              'Correo Electrónico',
+              'validationServerUsername',
+              'username',
+              formData.username,
+              handleChange
+            )}
+            {renderFormGroup('Departamento', 'validationServer03', 'city', formData.city, handleChange)}
+            {renderFormGroup('Edad', 'validationServer05', 'zip', formData.zip, handleChange, true, 'number')}
+
+            <div className="col-12">
+              <button className="btn btn-primary" type="submit">
+                Enviar
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
